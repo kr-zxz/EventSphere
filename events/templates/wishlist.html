@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Wishlist - Evento{% endblock %}
+
+{% block content %}
+<style>
+    .wishlist-container {
+        margin: 40px auto;
+        max-width: 900px;
+        padding: 20px;
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 2.2em;
+        font-weight: bold;
+    }
+    .wishlist-item {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .event-image {
+        width: 150px;
+        height: 100px;
+        border-radius: 8px;
+        object-fit: cover;
+        margin-right: 20px;
+        transition: transform 0.3s ease;
+    }
+    .event-image:hover {
+        transform: scale(1.1);
+    }
+    .event-details {
+        flex: 1;
+    }
+    .event-title {
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+    .event-date, .event-location {
+        color: #7f8c8d;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+    .btn-primary {
+        background: linear-gradient(to right, #6a11cb, #2575fc);
+        color: white;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(to right, #2575fc, #6a11cb);
+    }
+    .remove-btn {
+        background: linear-gradient(to right, #ff416c, #ff4b2b);
+        color: white;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s ease;
+        margin-left: 10px;
+    }
+    .remove-btn:hover {
+        background: linear-gradient(to right, #ff4b2b, #ff416c);
+    }
+    .empty-wishlist {
+        text-align: center;
+        font-size: 1.2em;
+        color: #666;
+        padding: 40px 0;
+    }
+</style>
+
+<div class="wishlist-container">
+    <h2>Your Wishlist</h2>
+    {% if wishlist_items %}
+        {% for item in wishlist_items %}
+            <div class="wishlist-item">
+                <img src="{{ item.event.image.url }}" alt="{{ item.event.title }}" class="event-image">
+                <div class="event-details">
+                    <div class="event-title">{{ item.event.title }}</div>
+                    <div class="event-date">Date: {{ item.event.date }}</div>
+                    <div class="event-location">Location: {{ item.event.location }}</div>
+                    <p>{{ item.event.description|truncatewords:20 }}</p>
+                    <div class="action-buttons">
+                        <a href="{% url 'event_detail' item.event.id %}" class="btn-primary">View Details</a>
+                        <a href="{% url 'remove_from_wishlist' item.event.id %}" class="remove-btn">Remove</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-wishlist">You have no events in your wishlist.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+

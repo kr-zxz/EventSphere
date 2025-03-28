@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Event Reviews</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: #f4f4f4;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #222;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 20px 15px;
+        }
+
+        .sidebar h3 {
+            color: #ffcc00;
+            text-align: center;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar a:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+
+        .container {
+            margin-left: 280px;
+            padding: 20px;
+            width: calc(100% - 280px);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        #search {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .sentiment-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .sentiment-positive {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .sentiment-negative {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .sentiment-neutral {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Admin Panel</h3>
+        <a href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'manage_events' %}"><i class="fas fa-calendar-alt"></i> Manage Events</a>
+        <a href="{% url 'admin_booking_list' %}"><i class="fas fa-list"></i> Manage Bookings</a>
+        <a href="{% url 'add_event' %}"><i class="fas fa-plus-circle"></i> Add Event</a>
+        <a href="{% url 'manage_categories' %}"><i class="fas fa-tags"></i> Manage Categories</a>
+        <a href="{% url 'manage_subcategories' %}"><i class="fas fa-list-ul"></i> Manage Sub Categories</a>
+        <a href="{% url 'sales_report' %}"><i class="fas fa-chart-line"></i> Sales Report</a>
+        <a href="{% url 'attendance_report' %}"><i class="fas fa-users"></i> Attendance Report</a>
+        <a href="{% url 'event_charts' %}"><i class="fas fa-chart-pie"></i> Event Charts</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="container">
+        <h1>Admin - Event Reviews</h1>
+        <input type="text" id="search" placeholder="Search by User or Event..." onkeyup="filterTable()">
+
+        <table id="reviewTable">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Event</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Sentiment</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                <tr>
+                    <td>{{ review.user.username }}</td>
+                    <td>{{ review.event.title }}</td>
+                    <td>{{ review.rating }} ⭐</td>
+                    <td>{{ review.comment }}</td>
+                    <td>
+                        <span class="sentiment-badge 
+                            {% if review.sentiment == 'positive' %}sentiment-positive
+                            {% elif review.sentiment == 'negative' %}sentiment-negative
+                            {% else %}sentiment-neutral{% endif %}">
+                            {{ review.sentiment|default:"neutral" }}
+                        </span>
+                    </td>
+                    <td>{{ review.created_at }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; font-weight: bold;">No reviews found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filterTable() {
+            let input = document.getElementById("search").value.toLowerCase();
+            let rows = document.querySelectorAll("#reviewTable tbody tr");
+            rows.forEach(row => {
+                let user = row.cells[0].textContent.toLowerCase();
+                let event = row.cells[1].textContent.toLowerCase();
+                row.style.display = (user.includes(input) || event.includes(input)) ? "" : "none";
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+</head>
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
+
+    <!-- Navbar -->
+    <div style="background-color: #007bff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; color: white;">
+        <div style="font-size: 1.5rem; font-weight: bold;">Event Management</div>
+        <nav style="display: flex; gap: 15px;">
+            <a href="/" style="color: white; text-decoration: none; font-size: 1rem;">Home</a>
+            <a href="/events" style="color: white; text-decoration: none; font-size: 1rem;">Events</a>
+            <a href="/contact" style="color: white; text-decoration: none; font-size: 1rem;">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Payment Section -->
+    <div style="max-width: 600px; margin: 50px auto; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <h1 style="text-align: center; color: #007bff;">Payment Confirmation</h1>
+        <p style="font-size: 1.2rem; margin: 15px 0;"><strong>Event:</strong> {{ booking.event.title }}</p>
+        <p style="font-size: 1.2rem; margin: 15px 0;"><strong>Date:</strong> {{ booking.event_date }}</p>
+        <p style="font-size: 1.2rem; margin: 15px 0;"><strong>Advance Paid:</strong> ₹{{ booking.advance_paid }}</p>
+        <p style="font-size: 1.2rem; margin: 15px 0;"><strong>Payment Method:</strong> {{ booking.payment_method }}</p>
+        <a href="{% url 'download_invoice' booking.id %}" style="display: inline-block; text-align: center; margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 1.1rem;">Download Invoice</a>
+    </div>
+
+</body>
+</html>

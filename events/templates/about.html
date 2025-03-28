@@ -1,0 +1,225 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+    {% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>About Us - Evento</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slicknav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gijgo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="{% static 'img/logo/loder.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preloader End -->
+
+    <header>
+        <!-- Header Start -->
+        <div class="header-area">
+            <div class="main-header header-sticky">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2 col-md-1">
+                            <div class="logo">
+                                <a href="{% url 'home' %}"><img src="{% static 'img/logo/Event.jpg' %}" alt=""></a>
+                            </div>
+                        </div>
+                        <!-- Navigation Menu -->
+                        <div class="col-xl-10 col-lg-10 col-md-10">
+                            <div class="menu-main d-flex align-items-center justify-content-end">
+                                <div class="main-menu f-right d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a href="{% url 'home' %}">Home</a></li>
+                                            <li><a href="{% url 'event_list' %}">Services</a></li>
+                                            <li><a href="{% url 'about' %}">About</a></li>
+                                            <li><a href="#">Speakers</a></li>
+                                            <li><a href="#">Blog</a>
+                                                <ul class="submenu">
+                                                    <li><a href="#">Blog</a></li>
+                                                    <li><a href="#">Element</a></li>
+                                                </ul>
+                                            </li>
+                                            
+                                            {% if user.is_authenticated %}
+                                                {% if user.is_superuser %}
+                                                    <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+                                                {% else %}
+                                                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                                                    <li><a href="{% url 'booking_history' %}">Booking History</a></li>
+                                                {% endif %}
+                                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'admin_login' %}">Admin Login</a></li>
+                                                <li><a href="{% url 'register' %}">Register</a></li>
+                                                <li><a href="{% url 'login' %}">Login</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+    </header>
+
+    <main>
+        <!--? About Law Start-->
+        <section class="about-low-area section-padding2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="about-caption mb-50">
+                            <!-- Section Tittle -->
+                            <div class="section-tittle mb-35">
+                                <h2>About Evento</h2>
+                            </div>
+                            <p>Welcome to <strong>Evento</strong>, your trusted partner in creating unforgettable events. We specialize in managing a wide range of events, from weddings and haldi functions to corporate conferences and private celebrations. Our team of experts ensures every detail is perfect, making your event a memorable experience.</p>
+                            <p>At Evento, we believe in turning your dreams into reality. Whether it's a grand wedding, a vibrant haldi ceremony, or a professional corporate event, we handle everything from planning to execution with precision and creativity.</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                                <div class="single-caption mb-20">
+                                    <div class="caption-icon">
+                                        <span class="flaticon-communications-1"></span>
+                                    </div>
+                                    <div class="caption">
+                                        <h5>Where</h5>
+                                        <p>Kuttikanam, Idukki</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                                <div class="single-caption mb-20">
+                                    <div class="caption-icon">
+                                        <span class="flaticon-education"></span>
+                                    </div>
+                                    <div class="caption">
+                                        <h5>When</h5>
+                                        <p>Jan. 21. 2025</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'event_list' %}" class="btn mt-50">Explore Events</a>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <!-- about-img -->
+                        <div class="about-img">
+                            <div class="about-font-img d-none d-lg-block">
+                                <img src="{% static 'img/gallery/about2.png' %}" alt="">
+                            </div>
+                            <div class="about-back-img">
+                                <img src="{% static 'img/gallery/about1.png' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- About Law End-->
+    </main>
+
+    <footer>
+        <!-- Footer Start-->
+        <div class="footer-area footer-padding">
+            <div class="container">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>About Us</h4>
+                                <div class="footer-pera">
+                                    <p>Evento is a full-service event management company specializing in weddings, corporate events, and private celebrations.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Contact Info</h4>
+                                <ul>
+                                    <li>
+                                        <p>Address: Marian College Kuttikanam</p>
+                                    </li>
+                                    <li><a href="#">Phone: +91 8590526498</a></li>
+                                    <li><a href="#">Email: krithikgr323@gmail.com</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Important Links</h4>
+                                <ul>
+                                    <li><a href="{% url 'home' %}">Home</a></li>
+                                    <li><a href="{% url 'event_list' %}">Services</a></li>
+                                    <li><a href="{% url 'about' %}">About</a></li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End-->
+    </footer>
+
+    <!-- JS here -->
+    <script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slicknav.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/slick.min.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/animated.headline.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.js' %}"></script>
+    <script src="{% static 'js/gijgo.min.js' %}"></script>
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/jquery.sticky.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'js/waypoints.min.js' %}"></script>
+    <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+    <script src="{% static 'js/contact.js' %}"></script>
+    <script src="{% static 'js/jquery.form.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/mail-script.js' %}"></script>
+    <script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

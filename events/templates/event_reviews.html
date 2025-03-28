@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Reviews</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Reviews for {{ event.title }}</h2>
+
+        <!-- Display Existing Reviews -->
+        <h4>User Reviews</h4>
+        {% if reviews %}
+            <ul class="list-group">
+                {% for review in reviews %}
+                    <li class="list-group-item">
+                        <strong>{{ review.user.username }}</strong> rated <strong>{{ review.rating }} stars</strong>
+                        <p>{{ review.review_text }}</p>
+                        <small>Reviewed on {{ review.created_at|date:"M d, Y" }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No reviews yet. Be the first to review!</p>
+        {% endif %}
+
+        <!-- Review Form -->
+        <h4 class="mt-4">Add Your Review</h4>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+
+        <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary mt-3">Back to Event Details</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+    {% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Evento - Event Management System</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slicknav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gijgo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Inline CSS -->
+    <style>
+        .event-details p {
+            font-size: 1.1em;
+            color: #555;
+        }
+        .event-image {
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .favorite-btn {
+            background-color: #f7b731;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .favorite-btn.active {
+            background-color: #e84118;
+        }
+
+        /* Review Section Styles */
+        #reviews-list .border {
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #reviews-list p {
+            margin: 10px 0;
+            color: #555;
+        }
+        #review-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #review-form .form-group {
+            margin-bottom: 15px;
+        }
+        #review-form label {
+            font-weight: bold;
+            color: #333;
+        }
+        #review-form textarea {
+            resize: none;
+        }
+        #review-form button {
+            background-color: #f7b731;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #review-form button:hover {
+            background-color: #e84118;
+            color: white;
+        }
+    </style>
+
+    <!-- Inline JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const favoriteBtn = document.getElementById("favorite-btn");
+
+            favoriteBtn.addEventListener("click", function () {
+                this.classList.toggle("active");
+                this.innerHTML = this.classList.contains("active") 
+                    ? '<i class="fas fa-heart"></i> Added to Favorites' 
+                    : '<i class="fas fa-heart"></i> Add to Favorites';
+            });
+
+            const reviewForm = document.getElementById("review-form");
+
+            reviewForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const rating = document.getElementById("rating").value;
+                const comment = document.getElementById("comment").value;
+
+                // Simulate saving the review (you can replace this with an AJAX call to your backend)
+                const newReview = {
+                    user: { username: "Current User" }, // Replace with actual user data
+                    rating: rating,
+                    comment: comment,
+                    created_at: new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })
+                };
+
+                // Add the new review to the reviews list
+                const reviewsList = document.getElementById("reviews-list");
+                const reviewDiv = document.createElement("div");
+                reviewDiv.className = "border p-3 mb-2";
+                reviewDiv.innerHTML = `
+                    <strong>${newReview.user.username}</strong> - 
+                    <span style="color: gold;">
+                        ${"★".repeat(newReview.rating)}${"☆".repeat(5 - newReview.rating)}
+                    </span> (${newReview.rating}/5)
+                    <p>${newReview.comment}</p>
+                    <small class="text-muted">${newReview.created_at}</small>
+                `;
+                reviewsList.prepend(reviewDiv);
+
+                // Update the average rating
+                const averageRatingValue = parseFloat(document.getElementById("average-rating-value").innerText);
+                const totalReviews = reviewsList.children.length;
+                const newAverageRating = ((averageRatingValue * (totalReviews - 1)) + parseFloat(newReview.rating)) / totalReviews;
+                document.getElementById("average-rating-value").innerText = newAverageRating.toFixed(1);
+
+                // Update the stars for the average rating
+                const averageRatingStars = document.getElementById("average-rating");
+                averageRatingStars.innerHTML = "★".repeat(Math.round(newAverageRating)) + "☆".repeat(5 - Math.round(newAverageRating));
+
+                // Reset the form
+                reviewForm.reset();
+                alert("Thank you for your review!");
+            });
+        });
+    </script>
+</head>
+<body>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="{% static 'img/logo/loder.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preloader End -->
+
+    <header>
+        <!-- Header Start -->
+        <div class="header-area">
+            <div class="main-header header-sticky">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2 col-md-1">
+                            <div class="logo">
+                                <a href="{% url 'home' %}"><img src="{% static 'img/logo/logo.png' %}" alt=""></a>
+                            </div>
+                        </div>
+                        <!-- Navigation Menu -->
+                        <div class="col-xl-10 col-lg-10 col-md-10">
+                            <div class="menu-main d-flex align-items-center justify-content-end">
+                                <div class="main-menu f-right d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a href="{% url 'home' %}">Home</a></li>
+                                            <li><a href="{% url 'event_list' %}">Services</a></li>
+                                            <li><a href="#about">About</a></li>
+                                            <li><a href="spakers.html">Speakers</a></li>
+                                            <li>
+                                                <a href="blog.html">Blog</a>
+                                                <ul class="submenu">
+                                                    <li><a href="blog.html">Blog</a></li>
+                                                    <li><a href="elements.html">Element</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="contact.html">Contact</a></li>
+                                            <li><a href="{% url 'wishlist' %}">wishlist</a></li>
+
+                                            {% if user.is_authenticated %}
+                                                {% if user.is_superuser %}
+                                                    <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+                                                {% else %}
+                                                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                                                {% endif %}
+                                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'admin_login' %}">Admin Login</a></li>
+                                                <li><a href="{% url 'register' %}">Register</a></li>
+                                                <li><a href="{% url 'login' %}">Login</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Event Image -->
+            <div class="col-md-6 text-center">
+                {% if event.image %}
+                    <img src="{{ event.image.url }}" class="img-fluid event-image" alt="{{ event.title }}">
+                {% else %}
+                    <img src="/static/images/default-placeholder.png" class="img-fluid event-image" alt="Default Image">
+                {% endif %}
+            </div>
+            <!-- Event Information -->
+            <div class="col-md-6 event-details">
+                <h2><i class="fas fa-calendar-alt text-primary"></i> {{ event.title }}</h2>
+                <p><strong><i class="fas fa-clock text-warning"></i> Date:</strong> {{ event.date }}</p>
+                <p><strong><i class="fas fa-map-marker-alt text-danger"></i> Location:</strong> {{ event.location }}</p>
+                <p><strong><i class="fas fa-layer-group text-success"></i> Category:</strong> {{ event.category.name }}</p>
+                <p><strong><i class="fas fa-tags text-info"></i> Sub Category:</strong> {{ event.subcategory.name }}</p>
+                <p><strong><i class="fas fa-money-bill-wave text-success"></i> Package Amount:</strong> ₹{{ event.package_amount }}</p>
+                <p><strong><i class="fas fa-info-circle text-secondary"></i> Description:</strong></p>
+                <p>{{ event.description }}</p>
+                
+                <a href="{% url 'booking_page' %}" class="btn btn-primary">
+                    <i class="fas fa-ticket-alt"></i> Book Now
+                </a>
+
+                <!-- Favorite Button -->
+                <button id="favorite-btn" class="favorite-btn">
+                    <i class="fas fa-heart"></i> Add to Favorites
+                </button>
+            </div>
+        </div>
+
+        <!-- Review and Rating Section -->
+        <div class="mt-4">
+            <h4>User Ratings & Reviews</h4>
+            
+            <!-- Display Average Rating -->
+            <div>
+                <strong>Average Rating: </strong>
+                <span id="average-rating" style="color: gold;">
+                    {% for i in "12345"|make_list %}
+                        {% if i|add:"0" <= average_rating %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </span> (<span id="average-rating-value">{{ average_rating }}</span>/5)
+            </div>
+
+            <!-- Reviews List -->
+            <div class="mt-3" id="reviews-list">
+                {% for review in reviews %}
+                    <div class="border p-3 mb-2">
+                        <strong>{{ review.user.username }}</strong> - 
+                        <span style="color: gold;">
+                            {% for i in "12345"|make_list %}
+                                {% if i|add:"0" <= review.rating %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        </span> ({{ review.rating }}/5)
+                        <p>{{ review.comment }}</p>
+                        <small class="text-muted">{{ review.created_at|date:"F j, Y" }}</small>
+                    </div>
+                {% empty %}
+                    <p>No reviews yet. Be the first to review this event!</p>
+                {% endfor %}
+            </div>
+
+            <!-- Add Review Form -->
+            <div class="mt-4">
+                <h5>Add Your Review</h5>
+                <form id="review-form">
+                    <div class="form-group">
+                        <label for="rating">Rating:</label>
+                        <select id="rating" class="form-control" required>
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Comment:</label>
+                        <textarea id="comment" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    ...
+</div> <!-- Main Content End -->
+
+<!-- Place Chatbot Button Code Here -->
+<button id="chatbot-btn" class="chatbot-button">
+    <a href="{% url 'chatbot' %}" class="chatbot-button">
+        <i class="fas fa-comments"></i> Chat with Us
+    </a>
+</button>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const chatbotBtn = document.getElementById("chatbot-btn");
+
+        chatbotBtn.addEventListener("click", function () {
+            alert("Chatbot feature coming soon!");
+        });
+    });
+</script>
+
+<style>
+    .chatbot-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #f7b731;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 50px;
+        font-size: 1em;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+    }
+    .chatbot-button:hover {
+        background-color: #e84118;
+    }
+</style>
+
+</body>
+
+
+
+    <!-- Footer Start -->
+    <footer>
+        <div class="container">
+            <p>© 2025 Evento. All rights reserved.</p>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Scroll Up -->
+    <div id="back-top">
+        <a title="Go to Top" href="#"><i class="fas fa-level-up-alt"></i></a>
+    </div>
+
+    <!-- JS here -->
+    <script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slicknav.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/slick.min.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script src="{% static 'js/animated.headline.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.js' %}"></script>
+    <script src="{% static 'js/gijgo.min.js' %}"></script>
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/jquery.sticky.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'js/waypoints.min.js' %}"></script>
+    <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+    <script src="{% static 'js/contact.js' %}"></script>
+    <script src="{% static 'js/jquery.form.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/mail-script.js' %}"></script>
+    <script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

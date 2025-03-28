@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Evento{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto; padding: 2rem; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h2 style="color: #2d3748; font-size: 1.8rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">
+        User Registration
+    </h2>
+    
+    <form id="registrationForm" method="post" action="{% url 'register' %}" style="display: grid; gap: 1.2rem;" onsubmit="return validateForm()">
+        {% csrf_token %}
+        
+        <div style="display: grid; gap: 0.5rem;">
+            <label style="font-weight: 500; color: #4a5568;">Full Name</label>
+            <input type="text" id="full_name" name="full_name" 
+                style="padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1rem;"
+                placeholder="Enter your full name" required>
+            <small id="name_error" style="color: #e53e3e; font-size: 0.875rem;"></small>
+        </div>
+
+        <div style="display: grid; gap: 0.5rem;">
+            <label style="font-weight: 500; color: #4a5568;">Email</label>
+            <input type="email" id="email" name="email" 
+                style="padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1rem;"
+                placeholder="Enter your email" required>
+            <small id="email_error" style="color: #e53e3e; font-size: 0.875rem;"></small>
+        </div>
+
+        <div style="display: grid; gap: 0.5rem;">
+            <label style="font-weight: 500; color: #4a5568;">Mobile Number</label>
+            <input type="text" id="mobile_number" name="mobile_number" 
+                style="padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1rem;"
+                placeholder="Enter 10-digit mobile number" pattern="\d{10}" required>
+            <small id="mobile_error" style="color: #e53e3e; font-size: 0.875rem;"></small>
+        </div>
+
+        <div style="display: grid; gap: 0.5rem;">
+            <label style="font-weight: 500; color: #4a5568;">Age</label>
+            <input type="number" id="age" name="age" 
+                style="padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1rem;"
+                placeholder="Enter your age" min="18" required>
+            <small id="age_error" style="color: #e53e3e; font-size: 0.875rem;"></small>
+        </div>
+
+        <div style="display: grid; gap: 0.5rem;">
+            <label style="font-weight: 500; color: #4a5568;">Gender</label>
+            <select id="gender" name="gender" 
+                style="padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1rem; background-color: white;"
+                required>
+                <option value="">Select your gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div style="display: grid; gap: 0.5rem;">
+            <label style="font-weight: 500; color: #4a5568;">Password</label>
+            <input type="password" id="password" name="password" 
+                style="padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1rem;"
+                placeholder="Enter password" required>
+            <small id="password_strength" style="color: #e53e3e; font-size: 0.875rem;"></small>
+        </div>
+
+        <div style="display: grid; gap: 0.5rem;">
+            <label style="font-weight: 500; color: #4a5568;">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" 
+                style="padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1rem;"
+                placeholder="Confirm password" required>
+            <small id="confirm_password_error" style="color: #e53e3e; font-size: 0.875rem;"></small>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0;">
+            <input type="checkbox" id="terms" name="terms" 
+                style="width: 1rem; height: 1rem; accent-color: #4299e1;" required>
+            <label style="color: #4a5568; font-size: 0.875rem;">
+                I agree to the <a href="#" style="color: #4299e1; text-decoration: none;">Terms and Conditions</a>
+            </label>
+        </div>
+
+        <button type="submit" 
+            style="background-color: #4299e1; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-weight: 500; cursor: pointer; transition: background-color 0.2s;"
+            onmouseover="this.style.backgroundColor='#3182ce'" 
+            onmouseout="this.style.backgroundColor='#4299e1'">
+            Register
+        </button>
+    </form>
+
+    <p style="text-align: center; margin-top: 1.5rem; color: #4a5568;">
+        Already have an account? 
+        <a href="{% url 'login' %}" style="color: #4299e1; text-decoration: none; font-weight: 500;">Log in here</a>
+    </p>
+</div>
+
+<script>
+    function validateForm() {
+        let valid = true;
+
+        const name = document.getElementById('full_name');
+        const email = document.getElementById('email');
+        const mobile = document.getElementById('mobile_number');
+        const age = document.getElementById('age');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+
+        if (name.value.trim() === "" || !/^[a-zA-Z\s]+$/.test(name.value)) {
+            document.getElementById('name_error').innerText = "Please enter a valid name.";
+            valid = false;
+        } else {
+            document.getElementById('name_error').innerText = "";
+        }
+
+        if (!/^\S+@\S+\.\S+$/.test(email.value)) {
+            document.getElementById('email_error').innerText = "Please enter a valid email.";
+            valid = false;
+        } else {
+            document.getElementById('email_error').innerText = "";
+        }
+
+        if (!/^\d{10}$/.test(mobile.value)) {
+            document.getElementById('mobile_error').innerText = "Please enter a valid 10-digit mobile number.";
+            valid = false;
+        } else {
+            document.getElementById('mobile_error').innerText = "";
+        }
+
+        if (age.value < 18) {
+            document.getElementById('age_error').innerText = "Age must be 18 or older.";
+            valid = false;
+        } else {
+            document.getElementById('age_error').innerText = "";
+        }
+
+        if (password.value.length < 8) {
+            document.getElementById('password_strength').innerText = "Password must be at least 8 characters long.";
+            valid = false;
+        } else {
+            document.getElementById('password_strength').innerText = "";
+        }
+
+        if (password.value !== confirmPassword.value) {
+            document.getElementById('confirm_password_error').innerText = "Passwords do not match.";
+            valid = false;
+        } else {
+            document.getElementById('confirm_password_error').innerText = "";
+        }
+
+        return valid;
+    }
+</script>
+{% endblock %}

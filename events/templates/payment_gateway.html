@@ -1,0 +1,35 @@
+<!-- payment_gateway.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment Gateway</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <h1>Complete Payment</h1>
+    <p>Amount: ₹{{ booking.event.package_amount }}</p>
+
+    <button id="rzp-button">Pay Now</button>
+
+    <script>
+        var options = {
+            "key": "{{ razorpay_key }}",
+            "amount": "{{ amount }}",
+            "currency": "INR",
+            "name": "EventSphere",
+            "order_id": "{{ order_id }}",
+            "handler": function (response) {
+                window.location.href = "{% url 'payment_success' %}";
+            },
+            "theme": {
+                "color": "#F37254"
+            }
+        };
+        var rzp = new Razorpay(options);
+        document.getElementById('rzp-button').onclick = function(e) {
+            rzp.open();
+            e.preventDefault();
+        }
+    </script>
+</body>
+</html>

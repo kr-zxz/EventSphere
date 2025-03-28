@@ -1,0 +1,130 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .chart-container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Admin Analytics</h2>
+
+    <div class="chart-container">
+        <h3>Event Bookings Overview</h3>
+        <canvas id="bookingChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h3>Revenue Overview</h3>
+        <canvas id="revenueChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h3>Ratings Distribution</h3>
+        <canvas id="ratingChart"></canvas>
+    </div>
+
+    <script>
+        // Event Bookings Chart
+        var bookingCtx = document.getElementById('bookingChart').getContext('2d');
+        var bookingChart = new Chart(bookingCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ event_names|safe }},
+                datasets: [{
+                    label: 'Total Bookings',
+                    data: {{ event_bookings }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Revenue Chart
+        var revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: {{ event_names|safe }},
+                datasets: [{
+                    label: 'Total Revenue',
+                    data: {{ event_revenue }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Ratings Distribution Chart
+        var ratingCtx = document.getElementById('ratingChart').getContext('2d');
+        var ratingChart = new Chart(ratingCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ["1 Star", "2 Stars", "3 Stars", "4 Stars", "5 Stars"],
+                datasets: [{
+                    label: 'Ratings',
+                    data: {{ rating_counts }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(255, 205, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(54, 162, 235, 0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+
+</body>
+</html> -->

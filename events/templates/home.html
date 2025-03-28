@@ -1,0 +1,894 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evento - Event Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            background-color: #34495e;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #ecf0f1 !important;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #1abc9c !important;
+        }
+
+        .hero-section {
+            background-image: url('https://img.freepik.com/free-photo/bows-rope-twine-pink-bouquets-white-chairs_8353-793.jpg?t=st=1737361027~exp=1737364627~hmac=02a054fdf4169264521766dc4a9fb9ea0411eaef1abfc04e7921c4e69f18c1af&w=1060');
+            background-size: cover;
+            background-position: center;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ecf0f1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero-section h1 {
+            font-size: 4rem;
+            font-weight: bold;
+        }
+
+        .hero-section p {
+            font-size: 1.5rem;
+        }
+
+        .features {
+            padding: 40px 0;
+            background-color: #ecf0f1;
+        }
+
+        .feature-box {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #34495e;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .social-icons a {
+            color: #ecf0f1;
+            margin: 0 10px;
+            font-size: 1.5rem;
+        }
+
+        .about-section {
+            padding: 40px 0;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        .about-section h2 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Evento</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'event_list' %}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+                        {% endif %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'admin_login' %}">Admin Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="text-center">
+            <h1>Welcome to Evento</h1>
+            <p>Plan, organize, and track your events seamlessly.</p>
+            <button class="btn btn-primary mt-3" onclick="scrollToSection('features')">Get Started</button>
+        </div>
+    </div>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="text-center mb-4">Our Features</h2>
+            <div class="row">
+                <div class="col-md-4 feature-box">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Event Planning</h5>
+                            <p class="card-text">Create detailed event plans, including schedules, budgets, and tasks.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 feature-box">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Venue Management</h5>
+                            <p class="card-text">Manage venue details, availability, and bookings efficiently.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 feature-box">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Ticketing & Registration</h5>
+                            <p class="card-text">Sell tickets online and manage attendee registrations seamlessly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <div class="container">
+            <h2>About Evento</h2>
+            <p>Evento is an all-in-one platform for managing events, from planning to execution. Whether you're organizing a small meeting or a large conference, Evento provides the tools you need to make your event a success.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Evento. All rights reserved.</p>
+        <p>Your Name | Your Address</p>
+        <div class="social-icons">
+            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html> 
+-->
+
+
+<!doctype html>
+<html class="no-js" lang="zxx">
+    {%load static%}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title> Evento - Event Management System </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="{%static 'img/favicon.ico'%}">
+
+	<!-- CSS here -->
+    
+	<link rel="stylesheet" href="{%static 'css/bootstrap.min.css'%}">
+	<link rel="stylesheet" href="{%static 'css/owl.carousel.min.css'%}">
+	<link rel="stylesheet" href="{%static 'css/slicknav.css'%}">
+    <link rel="stylesheet" href="{%static 'css/flaticon.css'%}">
+    <link rel="stylesheet" href="{%static 'css/gijgo.css'%}">
+	<link rel="stylesheet" href="{%static 'css/animate.min.css'%}">
+	<link rel="stylesheet" href="{%static 'css/magnific-popup.css'%}">
+	<link rel="stylesheet" href="{%static 'css/fontawesome-all.min.css'%}">
+	<link rel="stylesheet" href="{%static 'css/themify-icons.css'%}">
+	<link rel="stylesheet" href="{%static 'css/slick.css'%}">
+	<link rel="stylesheet" href="{%static 'css/nice-select.css'%}">
+	<link rel="stylesheet" href="{%static 'css/style.css'%}">
+</head>
+<body>
+    <!-- ? Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="{%static 'img/logo/loder.png'%}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preloader Start -->
+<header>
+    <!--? Header Start -->
+    <div class="header-area">
+        <div class="main-header header-sticky">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <!-- Logo -->
+                    <div class="col-xl-2 col-lg-2 col-md-1">
+                        <div class="logo">
+                            <a href="{%url 'home'%}"><img src="{%static 'img/logo/Event.jpg'%}" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-10 col-lg-10 col-md-10">
+                        <div class="menu-main d-flex align-items-center justify-content-end">
+                            <!-- Main-menu -->
+                            <div class="main-menu f-right d-none d-lg-block">
+                                <div class="main-menu f-right d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a href="{% url 'home' %}">Home</a></li>
+                                            <li><a href="{% url 'event_list' %}">Our Services</a></li>
+                                            <li><a href="{% url 'about' %}">About</a></li>
+                                            <li><a href="spakers.html">Spakers</a></li>
+                                            <li><a href="#">Blog</a>
+                                                <ul class="submenu">
+                                                    <li><a href="blog.html">Blog</a></li>
+                                                    <li><a href="elements.html">Element</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="contact.html">Contact</a></li>
+                                
+                                            {% if user.is_authenticated %}
+                                                {% if user.is_superuser %}
+                                                    <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+                                                {% else %}
+                                                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                                                    <a href="{% url 'booking_history' %}" style="color: rgb(12, 10, 58); text-decoration: none; font-size: 1rem;">Booking History</a>
+
+                                                {% endif %}
+                                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'admin_login' %}">Admin Login</a></li>
+                                                <li><a href="{% url 'register' %}">Register</a></li>
+                                                <li><a href="{% url 'login' %}">Login</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                                
+                            <!-- <div class="header-right-btn f-right d-none d-lg-block ml-30">
+                                <a href="#" class="btn header-btn">Explpore</a>
+                            </div> -->
+                        </div>
+                    </div>   
+                    <!-- Mobile Menu -->
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+</header>
+<main>
+    <!--? slider Area Start-->
+    <div class="slider-area position-relative">
+        <div class="slider-active">
+            <!-- Single Slider -->
+            <div class="single-slider slider-height d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-8 col-md-9 col-sm-10">
+                            <div class="hero__caption">
+                                <span data-animation="fadeInLeft" data-delay=".1s">Committed to success</span>
+                                <h1 data-animation="fadeInLeft" data-delay=".5s">Mastering Event Management: Strategies for Success</h1>
+                                <!-- Hero-btn -->
+                                <div class="slider-btns">
+                                    <a data-animation="fadeInLeft" data-delay="1.0s"href="{% url 'event_list' %}"class="btn hero-btn">Explore</a>
+                                    <a data-animation="fadeInRight" data-delay="1.0s" class="popup-video video-btn"  href="https://www.youtube.com/watch?v=up68UAfH0d0">
+                                        <i class="fas fa-play"></i></a>
+                                    <p class="video-cap d-none d-sm-blcok" data-animation="fadeInRight" data-delay="1.0s">Story Vidoe<br> Watch</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+            <!-- Single Slider -->
+            <div class="single-slider slider-height d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-8 col-md-9 col-sm-10">
+                            <div class="hero__caption">
+                                <span data-animation="fadeInLeft" data-delay=".1s">Committed to success</span>
+                                <h1 data-animation="fadeInLeft" data-delay=".5s">Digital Conference For Designers</h1>
+                                <!-- Hero-btn -->
+                                <div class="slider-btns">
+                                    <a data-animation="fadeInLeft" data-delay="1.0s" href="industries.html" class="btn hero-btn">Explore</a>
+                                    <a data-animation="fadeInRight" data-delay="1.0s" class="popup-video video-btn"  href="https://www.youtube.com/watch?v=up68UAfH0d0">
+                                        <i class="fas fa-play"></i></a>
+                                    <p class="video-cap d-none d-sm-blcok" data-animation="fadeInRight" data-delay="1.0s">Story Vidoe<br> Watch</p>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>          
+            </div>
+        </div>
+        <!-- Counter Section Begin -->
+        <div class="counter-section d-none d-sm-block">
+            <div class="cd-timer" id="countdown" >
+                <div class="cd-item">
+                    <span>96</span>
+                    <p>Days</p>
+                </div>
+                <div class="cd-item">
+                    <span>15</span>
+                    <p>Hrs</p>
+                </div>
+                <div class="cd-item">
+                    <span>07</span>
+                    <p>Min</p>
+                </div>
+                <div class="cd-item">
+                    <span>02</span>
+                    <p>Sec</p>
+                </div>
+            </div>
+        </div>
+        <!-- Counter Section End -->
+    </div>
+    <!-- slider Area End-->
+    <!--? About Law Start-->
+    <section class="about-low-area section-padding2">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="about-caption mb-50">
+                        <!-- Section Tittle -->
+                        <div class="section-tittle mb-35">
+                            <h2>The Biggest Digital Conference.</h2>
+                        </div>
+                        <p>"At EventSphere, we bring your events to life with creativity and precision. As a full-service event management company, we specialize in delivering unforgettable experiences, whether it's a corporate conference, a grand wedding, or a private celebration. Our team of experts handles everything from concept to execution, ensuring every detail is perfect. With innovative solutions and a commitment to excellence, EventSphere is your trusted partner in creating events that resonate and inspire. Let us transform your ideas into memorable moment.</p>
+                    
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                            <div class="single-caption mb-20">
+                                <div class="caption-icon">
+                                    <span class="flaticon-communications-1"></span>
+                                </div>
+                                <div class="caption">
+                                    <h5>Where</h5>
+                                    <p>Kuttikanam, Idukki</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                            <div class="single-caption mb-20">
+                                <div class="caption-icon">
+                                    <span class="flaticon-education"></span>
+                                </div>
+                                <div class="caption">
+                                    <h5>When</h5>
+                                    <p>Jan. 21. 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="btn mt-50">Explore</a>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <!-- about-img -->
+                    <div class="about-img ">
+                        <div class="about-font-img d-none d-lg-block">
+                            <img src="{%static 'img/gallery/about2.png'%}" alt="">
+                        </div>
+                        <div class="about-back-img ">
+                            <img src="{%static 'img/gallery/about1.png'%}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Law End-->
+    <!--? Brand Area Start -->
+    <section class="team-area pt-180 pb-100 section-bg" data-background="{%static 'img/gallery/section_bg02.png'%}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-9">
+                    <!-- Section Tittle -->
+                    <div class="section-tittle section-tittle2 mb-50">
+                        <h2>The Most Importent Speakers.</h2>
+                        <p>There arge many variations ohf passages of sorem gpsum ilable, but the majority have suffered alteration in.</p>
+                        <a href="#" class="btn white-btn mt-30">View Spackert</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="single-team mb-30">
+                        <div class="team-img">
+                            <img src="{%static 'img/gallery/team1.png'%}" alt="">
+                            <!-- Blog Social -->
+                            <ul class="team-social">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fas fa-globe"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="team-caption">
+                            <h3><a href="#">Krithik</a></h3>
+                            <p> Co Founder</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="single-team mb-30">
+                        <div class="team-img">
+                            <img src="{%static 'img/gallery/team2.png'%}" alt="">
+                            <!-- Blog Social -->
+                            <ul class="team-social">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fas fa-globe"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="team-caption">
+                            <h3><a href="#">Jesscia brown</a></h3>
+                            <p> Co Founder</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="single-team mb-30">
+                        <div class="team-img">
+                            <img src="{%static 'img/gallery/team3.png'%}" alt="">
+                            <!-- Blog Social -->
+                            <ul class="team-social">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fas fa-globe"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="team-caption">
+                            <h3><a href="#">brown Rulsan</a></h3>
+                            <p> Co Founder</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="single-team mb-30">
+                        <div class="team-img">
+                            <img src="{%static 'img/gallery/team4.png'%}" alt="">
+                            <!-- Blog Social -->
+                            <ul class="team-social">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fas fa-globe"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="team-caption">
+                            <h3><a href="#">Jesscia brown</a></h3>
+                            <p> Co Founder</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="single-team mb-30">
+                        <div class="team-img">
+                            <img src="{%static 'img/gallery/team5.png'%}" alt="">
+                            <!-- Blog Social -->
+                            <ul class="team-social">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fas fa-globe"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="team-caption">
+                            <h3><a href="#">Jesscia brown</a></h3>
+                            <p> Co Founder</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="single-team mb-30">
+                        <div class="team-img">
+                            <img src="{%static 'img/gallery/team6.png'%}" alt="">
+                            <!-- Blog Social -->
+                            <ul class="team-social">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fas fa-globe"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="team-caption">
+                            <h3><a href="#">wndfert droit</a></h3>
+                            <p> Co Founder</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Brand Area End -->  
+    <!--? accordion -->
+    
+                <!-- Card Four -->
+                <div class="tab-pane fade" id="nav-dinner" role="tabpanel" aria-labelledby="nav-dinner">
+                    <div class="row">
+                            <div class="col-lg-11">
+                                <div class="accordion-wrapper">
+                                    <div class="accordion" id="accordionExample">
+                                        <!-- single-one -->
+                                        <div class="card">
+                                            <div class="card-header" id="headingTwo">
+                                                <h2 class="mb-0">
+                                                    <a href="#" class="btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo10" aria-expanded="false" aria-controls="collapseTwo10">
+                                                        <span>8:30 AM - 9:30 AM</span>
+                                                        <p>Snackes</p>
+                                                    </a> 
+                                                </h2>
+                                            </div>
+                                            <div id="collapseTwo10" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    There arge many variations ohf passages of sorem gpsum ilable, but the majority have suffered alteration in some form, by ected humour, or randomised words whi.rere arge many variations ohf passages of sorem gpsum ilable.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- single-two -->
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h2 class="mb-0">
+                                                    <a href="#" class="btn-link" data-toggle="collapse" data-target="#collapseOne20" aria-expanded="true" aria-controls="collapseOne20">
+                                                        <span>8:30 AM - 9:30 AM</span>
+                                                        <p>Opening conference</p>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseOne20" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    There arge many variations ohf passages of sorem gpsum ilable, but the majority have suffered alteration in some form, by ected humour, or randomised words whi.rere arge many variations ohf passages of sorem gpsum ilable.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- single-three -->
+                                        <div class="card">
+                                            <div class="card-header" id="headingThree">
+                                                <h2 class="mb-0">
+                                                    <a href="#" class="btn-link collapsed" data-toggle="collapse" data-target="#collapseThree30" aria-expanded="false" aria-controls="collapseThree30">
+                                                        <span>8:30 AM - 9:30 AM</span>
+                                                        <p>Conference ending</p>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseThree30" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    There arge many variations ohf passages of sorem gpsum ilable, but the majority have suffered alteration in some form, by ected humour, or randomised words whi.rere arge many variations ohf passages of sorem gpsum ilable.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Nav Card -->
+        </div>
+    </section>
+    <!-- accordion End -->
+    
+    <!--? Pricing Card Start -->
+    <section class="pricing-card-area section-padding2">
+        <div class="container">
+            <!-- Section Tittle -->
+            <div class="row justify-content-center">
+                <div class="col-lg-5 col-md-8">
+                    <div class="section-tittle text-center mb-100">
+                        <h2>Program Pricing</h2>
+                        <p>There arge many variations ohf passages of sorem gp ilable, but the majority have ssorem gp iluffe.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-10">
+                    <div class="single-card text-center mb-30">
+                        <div class="card-top">
+                            <span>Day - 1</span>
+                            <h4>$ 05.00</h4>
+                        </div>
+                        <div class="card-bottom">
+                            <ul>
+                                <li>Increase traffic 50%</li>
+                                <li>E-mail support</li>
+                                <li>10 Free Optimization</li>
+                                <li>24/7  support</li>
+                            </ul>
+                            <a href="services.html" class="black-btn">View Spackert</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-10">
+                    <div class="single-card active text-center mb-30">
+                        <div class="card-top">
+                            <span>Day - 1,2,3</span>
+                            <h4>$ 08.00</h4>
+                        </div>
+                        <div class="card-bottom">
+                            <ul>
+                                <li>Increase traffic 50%</li>
+                                <li>E-mail support</li>
+                                <li>10 Free Optimization</li>
+                                <li>24/7  support</li>
+                            </ul>
+                            <a href="services.html" class="black-btn">View Spackert</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-10">
+                    <div class="single-card text-center mb-30">
+                        <div class="card-top">
+                            <span>Day - 1,2</span>
+                            <h4>$ 06.00</h4>
+                        </div>
+                        <div class="card-bottom">
+                            <ul>
+                                <li>Increase traffic 50%</li>
+                                <li>E-mail support</li>
+                                <li>10 Free Optimization</li>
+                                <li>24/7  support</li>
+                            </ul>
+                            <a href="services.html" class="black-btn">View Spackert</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Pricing Card End -->
+    <!--? Brand Area Start-->
+    <section class="work-company section-padding30" style="background: #2e0e8c;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5 col-md-8">
+                    <!-- Section Tittle -->
+                    <div class="section-tittle section-tittle2 mb-50">
+                        <h2>Our Top Genaral Sponsors.</h2>
+                        <p>There arge many variations ohf passages of sorem gp ilable, but the majority have ssorem gp iluffe.</p>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="logo-area">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="single-logo mb-30">
+                                    <img src="{%static 'img/gallery/cisco_brand.png'%}" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="single-logo mb-30">
+                                    <img src="{%static 'img/gallery/cisco_brand2.png'%}" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="single-logo mb-30">
+                                    <img src="{%static 'img/gallery/cisco_brand3.png'%}" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="single-logo mb-30">
+                                    <img src="{%static 'img/gallery/cisco_brand4.png'%}" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="single-logo mb-30">
+                                    <img src="{%static 'img/gallery/cisco_brand5.png'%}" alt="">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="single-logo mb-30">
+                                    <img src="{%static 'img/gallery/cisco_brand6.png'%}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Brand Area End-->
+    <!--? Blog Area Start -->
+    
+    <!-- Blog Area End -->
+    </main>
+    <footer>
+        <!-- Footer Start-->
+        <div class="footer-area footer-padding">
+            <div class="container">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                       <div class="single-footer-caption mb-50">
+                         <div class="single-footer-caption mb-30">
+                             <div class="footer-tittle">
+                                 <h4>About Us</h4>
+                                 <div class="footer-pera">
+                                     <p>Beyond meetings and presentations, we build connections in spaces that inspire success</p>
+                                </div>
+                             </div>
+                         </div>
+                       </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Contact Info</h4>
+                                <ul>
+                                    <li>
+                                        <p>Address :Marian College Kuttikanam</p>
+                                    </li>
+                                    <li><a href="#">Phone : +91 8590526498</a></li>
+                                    <li><a href="#">Email : krithikgr323@gmail.com</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Important Link</h4>
+                                <ul>
+                                    <li><a href="#"> View Project</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">Testimonial</a></li>
+                                    <li><a href="#">Proparties</a></li>
+                                    <li><a href="#">Support</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Newsletter</h4>
+                                <div class="footer-pera footer-pera2">
+                                 <p>Beyond meetings and presentations, we build connections in spaces that inspire success.</p>
+                             </div>
+                             <!-- Form -->
+                             <div class="footer-form" >
+                                 <div id="mc_embed_signup">
+                                     <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                                     method="get" class="subscribe_form relative mail_part">
+                                         <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
+                                         class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
+                                         onblur="this.placeholder = ' Email Address '">
+                                         <div class="form-icon">
+                                             <button type="submit" name="submit" id="newsletter-submit"
+                                             class="email_icon newsletter-submit button-contactForm"><img src="{%static 'img/gallery/form.png'%}" alt=""></button>
+                                         </div>
+                                         <div class="mt-10 info"></div>
+                                     </form>
+                                 </div>
+                             </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <!--  -->
+               <div class="row footer-wejed justify-content-between">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                        <!-- logo -->
+                        <div class="footer-logo mb-20">
+                        <a href="{%url 'home'%}"><img src="{%static 'img/logo/Event.png'%}" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                    <div class="footer-tittle-bottom">
+                        <span>5000+</span>
+                        <p>Talented Hunter</p>
+                    </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <div class="footer-tittle-bottom">
+                            <span>451</span>
+                            <p>Talented Hunter</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                        <!-- Footer Bottom Tittle -->
+                        <div class="footer-tittle-bottom">
+                            <span>568</span>
+                            <p>Talented Hunter</p>
+                        </div>
+                    </div>
+               </div>
+            </div>
+        </div>
+        <!-- footer-bottom area -->
+        <div class="footer-bottom-area footer-bg">
+            <div class="container">
+                <div class="footer-border">
+                     <div class="row d-flex justify-content-between align-items-center">
+                         <div class="col-xl-10 col-lg-8 ">
+                             <div class="footer-copy-right">
+                                 <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Event Management</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                             </div>
+                         </div>
+                         <div class="col-xl-2 col-lg-4">
+                             <div class="footer-social f-right">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="https://www.facebook.com/sai4ull"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fas fa-globe"></i></a>
+                                <a href="#"><i class="fab fa-behance"></i></a>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End-->
+    </footer>
+    <!-- Scroll Up -->
+    <div id="back-top" >
+        <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+    </div>
+
+    <!-- JS here -->
+
+    <script src="{%static 'js/vendor/modernizr-3.5.0.min.js'%}"></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script src="{%static 'js/vendor/jquery-1.12.4.min.js'%}"></script>
+    <script src="{%static 'js/popper.min.js'%}"></script>
+    <script src="{%static 'js/bootstrap.min.js'%}"></script>
+    <!-- Jquery Mobile Menu -->
+    <script src="{%static 'js/jquery.slicknav.min.js'%}"></script>
+
+    <!-- Jquery Slick , Owl-Carousel Plugins -->
+    <script src="{%static 'js/owl.carousel.min.js'%}"></script>
+    <script src="{%static 'js/slick.min.js'%}"></script>
+    <!-- One Page, Animated-HeadLin -->
+    <script src="{%static 'js/wow.min.js'%}"></script>
+    <script src="{%static 'js/animated.headline.js'%}"></script>
+    <script src="{%static 'js/jquery.magnific-popup.js'%}"></script>
+
+    <!-- Date Picker -->
+    <script src="{%static 'js/gijgo.min.js'%}"></script>
+    <!-- Nice-select, sticky -->
+    <script src="{%static 'js/jquery.nice-select.min.js'%}"></script>
+    <script src="{%static 'js/jquery.sticky.js'%}"></script>
+    
+    <!-- counter , waypoint -->
+    <script src="{%static 'js/jquery.counterup.min.js'%}"></script>
+    <script src="{%static 'js/waypoints.min.js'%}"></script>
+    <script src="{%static 'js/jquery.countdown.min.js'%}"></script>
+    <!-- contact js -->
+    <script src="{%static 'js/contact.js'%}"></script>
+    <script src="{%static 'js/jquery.form.js'%}"></script>
+    <script src="{%static 'js/jquery.validate.min.js'%}"></script>
+    <script src="{%static 'js/mail-script.js'%}"></script>
+    <script src="{%static 'js/jquery.ajaxchimp.min.js'%}"></script>
+    
+    <!-- Jquery Plugins, main Jquery -->	
+    <script src="{%static 'js/plugins.js'%}"></script>
+    <script src="{%static 'js/main.js'%}"></script>
+    
+    </body>
+</html>

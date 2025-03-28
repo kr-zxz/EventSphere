@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Payment History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            display: flex;
+            transition: background-color 0.4s, color 0.4s;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: #222;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 20px 15px;
+        }
+
+        .sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffcc00;
+            text-align: center;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar a:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+
+        .container {
+            margin-left: 280px;
+            padding: 20px;
+            width: calc(100% - 280px);
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        .dark-mode table th {
+            background-color: #343a40;
+        }
+
+        .dark-mode table tr:hover {
+            background-color: #2b2b2b;
+        }
+
+        /* Toggle Dark Mode */
+        .toggle-mode {
+            position: fixed;
+            top: 10px;
+            right: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .toggle-mode:hover {
+            background-color: #0056b3;
+        }
+
+        .dark-mode .toggle-mode {
+            background-color: #ffcc00;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-mode" onclick="toggleMode()">🌙 Dark Mode</button>
+
+    <div class="sidebar">
+        <h3>Admin Dashboard</h3>
+        <a href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'manage_events' %}"><i class="fas fa-calendar-alt"></i> Manage Events</a>
+        <a href="{% url 'admin_booking_list' %}"><i class="fas fa-list"></i> Manage Bookings</a>
+        <a href="{% url 'add_event' %}"><i class="fas fa-plus-circle"></i> Add Event</a>
+        <a href="{% url 'manage_categories' %}"><i class="fas fa-tags"></i> Manage Categories</a>
+        <a href="{% url 'manage_subcategories' %}"><i class="fas fa-list-ul"></i> Manage Sub Categories</a>
+        <a href="{% url 'sales_report' %}"><i class="fas fa-chart-line"></i> Sales Report</a>
+        <a href="{% url 'attendance_report' %}"><i class="fas fa-users"></i> Attendance Report</a>
+        <a href="{% url 'event_charts' %}"><i class="fas fa-chart-pie"></i> Event Charts</a>
+        <a href="{% url 'admin_payment_history' %}"><i class="fas fa-credit-card"></i> Payment History</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="container">
+        <h1>Admin - Payment History</h1>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>User</th>
+                        <th>Event</th>
+                        <th>Payment Method</th>
+                        <th>Transaction ID</th>
+                        <th>Order ID</th>
+                        <th>Signature</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Payment Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.id }}</td>
+                        <td>{{ payment.user.username }}</td>
+                        <td>{{ payment.booking.event.title }}</td>
+                        <td>{{ payment.get_payment_method_display }}</td>
+                        <td>{{ payment.transaction_id|default:"N/A" }}</td>
+                        <td>{{ payment.razorpay_order_id|default:"N/A" }}</td>
+                        <td>{{ payment.razorpay_signature|default:"N/A" }}</td>
+                        <td>₹{{ payment.booking.event.package_amount|default:"0.00" }}</td>
+                        <td>{{ payment.status }}</td>
+                        <td>{{ payment.payment_date|date:"Y-m-d H:i:s" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" style="text-align: center; color: #888;">No payments found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleMode() { 
+            document.body.classList.toggle('dark-mode'); 
+        }
+    </script>
+</body>
+</html>

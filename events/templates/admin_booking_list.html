@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Booking List</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #003f7f;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h2 {
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar a:hover {
+            background-color: #00509e;
+        }
+        .container {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        h1 {
+            color: #003f7f;
+            margin-bottom: 20px;
+        }
+        #search-bar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        table th, table td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background-color: #003f7f;
+            color: #fff;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+        .btn {
+            padding: 10px 15px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-approve {
+            background-color: #28a745;
+        }
+        .btn-approve:hover {
+            background-color: #218838;
+        }
+        .btn-cancel {
+            background-color: #dc3545;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+        .btn-waiting {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .btn-waiting:hover {
+            background-color: #e0a800;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+        <a href="{% url 'admin_review_list' %}">Manage Reviews</a>
+        <a href="{% url 'manage_events' %}">Manage Events</a>
+        <a href="{% url 'admin_booking_list' %}">Manage Bookings</a>
+        <a href="{% url 'add_event' %}">Add Event</a>
+        <a href="{% url 'manage_categories' %}">Manage Categories</a>
+        <a href="{% url 'manage_subcategories' %}">Manage Sub Categories</a>
+        <a href="{% url 'add_category' %}">Add Category</a>
+        <a href="{% url 'admin_payment_history' %}">
+            <i class="fas fa-money-check-alt"></i> Payment History
+        </a>
+        
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+    <div class="container">
+        <h1>Admin - Booking List</h1>
+        <input type="text" id="search-bar" placeholder="Search for bookings...">
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>User</th>
+                    <th>Event</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Event Date</th>
+                    <th>Event Type</th>
+                    <th>Location Details</th>
+                    <th>Pincode</th>
+                    <th>Food Options</th>
+                    <th>Advice</th>
+                    <th>Payment Method</th>
+                    <th>Advance Paid</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="booking-list">
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.id }}</td>
+                    <td>{{ booking.user.username }}</td>
+                    <td>{{ booking.event.title }}</td>
+                    <td>{{ booking.phone_number }}</td>
+                    <td>{{ booking.email }}</td>
+                    <td>{{ booking.event_date }}</td>
+                    <td>{{ booking.event_type }}</td>
+                    <td>{{ booking.location_details }}</td>
+                    <td>{{ booking.pincode }}</td>
+                    <td>{{ booking.food_options|yesno:"Yes,No" }}</td>
+                    <td>{{ booking.advice }}</td>
+                    <td>{{ booking.payment_method }}</td>
+                    <td>{{ booking.advance_paid|yesno:"Yes,No" }}</td>
+                    <td>{{ booking.status }}</td>
+                    <td>
+                        <form action="{% url 'approve_booking' booking.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-approve">Approve</button>
+                        </form>
+                        <form action="{% url 'cancel_booking' booking.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-cancel">Cancel</button>
+                        </form>
+                        <form action="{% url 'waiting_booking' booking.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-waiting">Waiting</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="15" style="text-align: center; color: #888;">No bookings available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const searchBar = document.getElementById('search-bar');
+        const bookingList = document.getElementById('booking-list');
+        
+        searchBar.addEventListener('input', () => {
+            const filter = searchBar.value.toLowerCase();
+            const rows = bookingList.getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let match = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(filter)) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                row.style.display = match ? '' : 'none';
+            }
+        });
+    </script>
+</body>
+</html>

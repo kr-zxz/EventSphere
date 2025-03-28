@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2><i class="fas fa-wallet"></i> Payment History</h2>
+
+    {% if payments %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Booking ID</th>
+                    <th>Event Name</th>
+                    <th>Payment Method</th>
+                    <th>Transaction ID</th>
+                    <th>Status</th>
+                    <th>Amount Paid</th>
+                    <th>Payment Date</th>
+                    <th>Invoice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payments %}
+                <tr>
+                    <td>{{ payment.id }}</td>
+                    <td>{{ payment.booking.id }}</td>
+                    <td>{{ payment.booking.event.title }}</td>
+                    <td>{{ payment.get_payment_method_display }}</td>
+                    <td>{{ payment.transaction_id|default:"N/A" }}</td>
+                    <td>
+                        {% if payment.status == "Success" %}
+                            <span class="badge bg-success">Success</span>
+                        {% elif payment.status == "Pending" %}
+                            <span class="badge bg-warning">Pending</span>
+                        {% else %}
+                            <span class="badge bg-danger">Failed</span>
+                        {% endif %}
+                    </td>
+                    <td>₹{{ payment.booking.event.package_amount }}</td>
+                    <td>{{ payment.payment_date|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        {% if payment.status == "Success" %}
+                            <a href="{% url 'download_invoice' payment.id %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-file-download"></i> Download
+                            </a>
+                        {% else %}
+                            <span class="text-muted">N/A</span>
+                        {% endif %}
+                    </td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination">
+                {% if payments.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ payments.previous_page_number }}">Previous</a></li>
+                {% endif %}
+
+                <li class="page-item disabled"><a class="page-link">Page {{ payments.number }} of {{ payments.paginator.num_pages }}</a></li>
+
+                {% if payments.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ payments.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ payments.paginator.num_pages }}">Last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    {% else %}
+        <p>No payment history found.</p>
+    {% endif %}
+
+    <a href="{% url 'booking_history' %}" class="btn btn-secondary mt-3">
+        <i class="fas fa-arrow-left"></i> Back to Booking History
+    </a>
+</div>
+{% endblock %}

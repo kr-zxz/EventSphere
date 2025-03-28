@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 20px 10px;
+        }
+        .sidebar h3 {
+            color: #ffc107;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+        .container {
+            margin-left: 270px;
+            padding: 20px;
+            width: calc(100% - 270px);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Admin Dashboard</h3>
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+        <a href="{% url 'manage_events' %}">Manage Events</a>
+        <a href="{% url 'add_event' %}">Add Event</a>
+        <a href="{% url 'manage_categories' %}">Manage Categories</a>
+        <a href="{% url 'add_category' %}">Add Category</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Add New Event</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" value="{{ form.title.value }}" required>
+                {% for error in form.title.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                    <option value="" selected disabled>Choose a category</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}" {% if form.category.value == category.id %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% for error in form.category.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="subcategory">Subcategory</label>
+                <select id="subcategory" name="subcategory">
+                    <option value="" selected disabled>Choose a subcategory</option>
+                    {% for subcategory in subcategories %}
+                    <option value="{{ subcategory.id }}" {% if form.subcategory.value == subcategory.id %}selected{% endif %}>
+                        {{ subcategory.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% for error in form.subcategory.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="5" required>{{ form.description.value }}</textarea>
+                {% for error in form.description.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" id="image" name="image">
+                {% for error in form.image.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <textarea id="location" name="location" rows="2" required>{{ form.location.value }}</textarea>
+                {% for error in form.location.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" value="{{ form.date.value }}" required>
+                {% for error in form.date.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="package_amount">Package Amount</label>
+                <input type="number" id="package_amount" name="package_amount" step="0.01" value="{{ form.package_amount.value }}" required>
+                {% for error in form.package_amount.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; padding: 20px;">
+
+    <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: green;">🎉 Payment Successful! 🎉</h2>
+        <hr>
+
+        <p style="font-size: 18px; color: #333;">Thank you, <strong>{{ booking.user.username }}</strong>!</p>
+        <p style="font-size: 16px;">Your payment for <strong>{{ booking.event.title }}</strong> has been processed successfully.</p>
+
+        <div style="text-align: left; margin-top: 20px;">
+            <h4>📝 Payment Details</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Booking ID</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ booking.id }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Event Name</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ booking.event.title }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Event Date</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ booking.event.date }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Payment Method</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ payment.payment_method }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Transaction ID</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">{{ payment.transaction_id }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Amount Paid</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">₹{{ booking.event.package_amount }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>Payment Status</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd; color: green;"><strong>Success</strong></td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'download_invoice' booking.id %}" style="display: inline-block; padding: 10px 20px; background: blue; color: white; text-decoration: none; border-radius: 5px;">
+                📄 Download Invoice
+            </a>
+            <a href="{% url 'homepage' %}" style="display: inline-block; padding: 10px 20px; background: gray; color: white; text-decoration: none; border-radius: 5px; margin-left: 10px;">
+                🏠 Return to Home
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

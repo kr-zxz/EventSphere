@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            transition: background 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #343a40, #212529);
+            color: #fff;
+            position: fixed;
+            height: 100vh;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+        .sidebar h3 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: #dcdcdc;
+            padding: 12px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        .sidebar a i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        .sidebar a:hover {
+            background-color: #007bff;
+            color: white;
+            transform: scale(1.05);
+        }
+        .content {
+            margin-left: 280px;
+            padding: 20px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        /* Dark Mode Styles */
+        .dark-mode .content {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        .dark-mode table {
+            background-color: #222;
+            color: #fff;
+        }
+        .dark-mode th {
+            background-color: #007bff;
+        }
+        .dark-mode tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+        .dark-mode tr:hover {
+            background-color: #333;
+        }
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .toggle-container i {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Admin Dashboard</h3>
+        <a href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'manage_events' %}"><i class="fas fa-calendar-check"></i> Manage Events</a>
+        <a href="{% url 'admin_booking_list' %}"><i class="fas fa-book"></i> Manage Bookings</a>
+        <a href="{% url 'add_event' %}"><i class="fas fa-plus-circle"></i> Add Event</a>
+        <a href="{% url 'manage_categories' %}"><i class="fas fa-layer-group"></i> Manage Categories</a>
+        <a href="{% url 'manage_subcategories' %}"><i class="fas fa-th-list"></i> Manage Sub Categories</a>
+        <a href="{% url 'add_category' %}"><i class="fas fa-plus-square"></i> Add Category</a>
+        <a href="{% url 'sales_report' %}"><i class="fas fa-chart-line"></i> Sales Report</a>
+        <a href="{% url 'attendance_report' %}"><i class="fas fa-users"></i> Attendance Report</a>
+        <a href="{% url 'event_charts' %}"><i class="fas fa-chart-pie"></i> Event Charts</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+
+        <!-- Dark Mode Toggle -->
+        <div class="toggle-container" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i> <span id="mode-text">Dark Mode</span>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1>Sales Report</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn">Back to Dashboard</a>
+        
+        <h2>Total Sales: ₹{{ total_amount }}</h2> <!-- Display total sales amount -->
+    
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Event</th>
+                    <th>Event Date</th>
+                    <th>Status</th>
+                    <th>Package Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.user.username }}</td>
+                    <td>{{ booking.event.title }}</td>
+                    <td>{{ booking.event_date }}</td>
+                    <td>{{ booking.status }}</td>
+                    <td>₹{{ booking.event.package_amount }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No bookings available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            let modeText = document.getElementById("mode-text");
+            modeText.innerText = document.body.classList.contains('dark-mode') ? "Light Mode" : "Dark Mode";
+        }
+    </script>
+</body>
+</html>
